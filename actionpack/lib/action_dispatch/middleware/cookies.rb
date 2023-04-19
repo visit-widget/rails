@@ -631,7 +631,7 @@ module ActionDispatch
         def commit(name, options)
           options[:value] = @verifier.generate(serialize(options[:value]), **cookie_metadata(name, options))
 
-          raise CookieOverflow if options[:value].bytesize > MAX_COOKIE_SIZE
+          raise CookieOverflow.new("Cookie with key '#{name}' is too large: #{options[:value].bytesize}") if options[:value].bytesize > MAX_COOKIE_SIZE
         end
     end
 
@@ -683,7 +683,7 @@ module ActionDispatch
         def commit(name, options)
           options[:value] = @encryptor.encrypt_and_sign(serialize(options[:value]), **cookie_metadata(name, options))
 
-          raise CookieOverflow if options[:value].bytesize > MAX_COOKIE_SIZE
+          raise CookieOverflow.new("Cookie with key '#{name}' is too large: #{options[:value].bytesize}") if options[:value].bytesize > MAX_COOKIE_SIZE
         end
     end
 
